@@ -31,9 +31,14 @@ async fn main() -> Result<()> {
         App::new()
             .data(pool.clone())
             .service(web::scope("/user").service(user::login).service(user::join))
-            .service(web::scope("/search").service(book::search))
+            .service(
+                web::scope("/book")
+                    .service(book::search)
+                    .service(book::list)
+                    .service(book::read),
+            )
     })
-    .bind("127.0.0.1:8080")?
+    .bind("0.0.0.0:8080")?
     .run()
     .await
 }
